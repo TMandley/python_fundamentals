@@ -1,0 +1,18 @@
+{% if first_name == 0 %}
+<p class="something"></p>
+{% endif %}
+{% if email == 1 %}
+<p class="something" style='color:red'>Must be a valid email (example@example.com)</p>
+{% endif %}
+{% if email == 2 %}
+<p class="something" style='color:red'>That email is already in use</p>
+{% endif %}
+{% if first_name == 1 %}
+<p class="something" style='color:red'>Must be at least 2 characters</p>
+{% endif %}
+{% if last_name == 0 %}
+<p class="something"></p>
+{% endif %}
+{% if last_name == 1 %}
+<p class="something" style='color:red'>Must be at least 2 characters</p>
+{% endif %}
