@@ -21,6 +21,7 @@ def success(request):
     # for job in somejobs:
     #     print(job.title)
     # print(somejobs)
+    # print('*'*100)
     context = {
         'thisuser': thisuser,
         'myjobs': Job.objects.filter(posted_by=thisuser),
