@@ -20,16 +20,16 @@ class UserManager(models.Manager):
             errors['first-name'] = "First name must contain at least 2 characters"
         if len(postData['last_name']) < 2:
             errors['last-name'] = "Last name must contain at least 2 characters"
-        if len(postData['birthday']) < 1:
-            errors['birthday'] = "Must enter a valid birthday"
-        else:
-            if datetime.strptime(postData['birthday'] + ' ' + '12:00:00', '%Y-%m-%d %H:%M:%S').date() > date.today():
-                errors['birthday'] = "Cannot enter a future date for a birthday"
-            if datetime.strptime(postData['birthday'] + ' ' + '12:00:00', '%Y-%m-%d %H:%M:%S').date() < date.today():
-                findtime = date.today() - datetime.strptime(postData['birthday'] + ' ' + '12:00:00', '%Y-%m-%d %H:%M:%S').date()
-                yeardiff = findtime.total_seconds() / 31536000
-                if yeardiff < 13:
-                    errors['birthday'] = "Must be at least 13 years of age to register"
+        # if len(postData['birthday']) < 1:
+        #     errors['birthday'] = "Must enter a valid birthday"
+        # else:
+        #     if datetime.strptime(postData['birthday'] + ' ' + '12:00:00', '%Y-%m-%d %H:%M:%S').date() > date.today():
+        #         errors['birthday'] = "Cannot enter a future date for a birthday"
+        #     if datetime.strptime(postData['birthday'] + ' ' + '12:00:00', '%Y-%m-%d %H:%M:%S').date() < date.today():
+        #         findtime = date.today() - datetime.strptime(postData['birthday'] + ' ' + '12:00:00', '%Y-%m-%d %H:%M:%S').date()
+        #         yeardiff = findtime.total_seconds() / 31536000
+        #         if yeardiff < 13:
+        #             errors['birthday'] = "Must be at least 13 years of age to register"
         if not EMAIL_REGEX.match(postData['email']):
             errors['email'] = "Must be a valid email address"
         if len(postData['password']) < 8:
@@ -58,6 +58,7 @@ class UserManager(models.Manager):
         errors = {}
         if not EMAIL_REGEX.match(postData['email']):
             errors['email'] = "Must be a valid email address"
+            return errors
         try:
             findme = User.objects.get(email=postData['email'])
         except User.DoesNotExist:
@@ -70,13 +71,34 @@ class UserManager(models.Manager):
             print('password match')
         else:
             errors['password'] = "Wrong password entered"
+        return errors
+
+    def job_validator(request, postData):
+        errors = {}
+        if len(postData['title']) < 3:
+            errors['title'] = "Title must contain at least 3 characters"
+        if len(postData['description']) < 3:
+            errors['description'] = "Description must contain at least 3 characters"
+        if len(postData['location']) < 3:
+            errors['location'] = "Location must contain at least 3 characters"
+        return errors
 
 class User(models.Model):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
-    birthday = models.CharField(max_length=25)
     email = models.CharField(max_length=100)
     password = models.CharField(max_length=150)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    objects = UserManager()
+
+class Job(models.Model):
+    title = models.CharField(max_length=100)
+    location = models.CharField(max_length=255)
+    description = models.TextField()
+    categories = models.TextField()
+    posted_by = models.ForeignKey(User, related_name="jobs_posted", null=True)
+    active_user = models.ForeignKey(User, related_name="active_jobs", null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     objects = UserManager()

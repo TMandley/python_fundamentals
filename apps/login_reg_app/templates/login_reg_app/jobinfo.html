@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <div class="container mt-3">
+        <div class="row">
+            <h3 class="col-6">Hello {{thisuser.first_name}}! These are the job details!</h3>
+            <div class="col-3"></div>
+            <div class="col-1"><a href='/dashboard'>Dashboard</a></div>
+            <form action='/destroy' class="col-2">
+                <button type="submit" class="btn btn-secondary">Log Out</button>
+            </form>
+        </div>
+        <hr>
+            <h5 class="ml-2">{{thisjob.title}}</h5>
+            <div class="border border-dark col-6 pt-2">
+                    <p>{{thisjob.description}}</p>
+                    <p>{{thisjob.location}}</p>
+                    <p>Posted By: {{thisjob.posted_by.first_name}} {{thisjob.posted_by.last_name}}</p>
+                    <p>Posted On: {{thisjob.created_at}}</p>
+                    <p>Categories: {{thisjob.categories}}</p>
+            </div>
+            {% if thisjob.active_user == thisuser %}
+            <a href='/giveup/{{thisjob.id}}'>Give up</a>
+            {% else %}
+            <a class="ml-2" href='/processaddjob/{{thisjob.id}}'>Add to my jobs</a>
+            {% endif %}
+        </div>
+</body>
+</html>
